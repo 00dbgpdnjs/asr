@@ -1,1 +1,7 @@
 soundcard
+webrtcvad # or webrtcvad-wheels
+# torchaudio # depreated
+torch
+halo
+soundfile
+pyaudio # 에러나면 sudo apt update, sudo apt install python3-dev 먼저!
