@@ -73,7 +73,7 @@ class CJUWhisper:
         # whisper는 data를 numpy로 처리하는 main.py의 audio_float32가 텐서라서 체크
         if isinstance(data, torch.Tensor):
             data = data.numpy()
-        result = self.pipe(inputs=data, generate_kargs=optinos) # 음성으로부터 변환된 텍스트 반환
+        result = self.pipe(inputs=data, generate_kwargs=optinos) # 음성으로부터 변환된 텍스트 반환
         
         # 음성 파일이 길면 dict가 아니라 list로 넘어올 수도 있음
         if isinstance(result, dict):
