@@ -5,3 +5,5 @@ torch
 halo
 soundfile
 pyaudio # 에러나면 sudo apt update, sudo apt install python3-dev 먼저!
+transformers
+accelerate
