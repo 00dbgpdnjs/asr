@@ -1,3 +1,4 @@
+###### whisper_local_live_asr mini-project1 #####
 soundcard
 webrtcvad # or webrtcvad-wheels
 # torchaudio # depreated
@@ -7,3 +8,9 @@ soundfile
 pyaudio # 에러나면 sudo apt update, sudo apt install python3-dev 먼저!
 transformers
 accelerate
+
+###### file_asr_no_socket mini-project2 #####
+flask 
+werkzeug 
+flask_wtf 
+wtforms
