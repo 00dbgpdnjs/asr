@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 
 whisper_local_live_asr/model_archive/
+file_asr_no_socket/secret.py
