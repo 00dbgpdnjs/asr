@@ -2,10 +2,15 @@ from flask import (
     Blueprint, 
     render_template,
 )
+from server.forms import FileUploadForm
  
 bp = Blueprint('asr_file', __name__, url_prefix='/asr_file') 
 
 @bp.route('/') # / = /asr_file
 def index():
     '''메인 페이지'''
-    return render_template('asr_file.html')
+    form = FileUploadForm()
+    return render_template(
+        'asr_file.html',
+        form=form, # 파라미터명을 asr_file.html에 form.csrf_token 즉 form과 똑같이
+    )
