@@ -136,8 +136,8 @@ $(function(){ // document(html)이 준비되었을 때 바로 실행됨 (사용�
             method: 'POST',
             url: `/asr_file/upload/${user_id}`,
             data: form_data,
-            dataType: false,// asr_file_views.py의 upload()로 보내는 데이터 형식
-            contentType: 'json', // asr_file_views.py의 upload()로부터 받을 데이터 형식
+            dataType: 'json',// 서버(asr_file_views.py의 upload())로부터 받을 데이터 형식
+            contentType: false, // asr_file_views.py의 upload()로 보내는 데이터 형식. 파일로 보내니까 false
             processData: false, // 보내기전에 클라이언트에서 파일을 전처리 못하게
             cache: false,
             success: function(result){ //asr_file_views.py의 upload()로부터 reponse가 잘 온 경우. asr_file_views.py의 upload() 반환값을 result가 받음

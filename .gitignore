@@ -163,3 +163,4 @@ cython_debug/
 
 whisper_local_live_asr/model_archive/
 file_asr_no_socket/secret.py
+file_asr_no_socket/server/static/files/
