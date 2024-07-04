@@ -142,7 +142,8 @@ $(function(){ // document(html)이 준비되었을 때 바로 실행됨 (사용�
             cache: false,
             success: function(result){ //asr_file_views.py의 upload()로부터 reponse가 잘 온 경우. asr_file_views.py의 upload() 반환값을 result가 받음
                 console.log(result['status'])
-                $('#p_par_area_process').attr('hidden', true);
+                $('#p_par_area_upload').attr('hidden', true);
+                $('#p_par_area_process').attr('hidden', false);
                 $('#result_text_area').attr('hidden', false);
                 process(user_id)
             },
@@ -153,6 +154,14 @@ $(function(){ // document(html)이 준비되었을 때 바로 실행됨 (사용�
         });  
 
     });
+
+    $('#clear-content-btn').on('click', function(){
+        location.reload();
+    })
+
+    $('#new-task-btn').on('click', function(){
+        location.reload();
+    })
 });
 
 function process(user_id){
@@ -160,6 +169,24 @@ function process(user_id){
     // 텍스트 데이터가 도착 성공하면
     // -> html (브라우저)에 시현
     // 실패하면 -> 에러 발생... 관리자에게 문의해 주세요...
-    console.log(`user_id: ${user_id}`);
-    
+    $.ajax({
+        method: 'POST',
+        url: '/asr_file/process',
+        data: JSON.stringify({'user_id': user_id}),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(result){
+            console.log(result)
+            $('#p_par_area_process').attr('hidden', true);
+            $('#textarea_label').remove();
+            $('#floatingTextarea2').val(result['0']);
+            $('#new-task-btn').attr('hidden', false);
+            
+        },
+        error: function(error){
+            alert('에러가 발생했습니다. 관리자에게 문의해 주세요')
+            console.log(error.status, error.statusText)
+            location.href = '/asr_file';
+        }
+    });   
 }
