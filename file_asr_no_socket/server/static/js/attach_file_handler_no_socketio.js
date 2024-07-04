@@ -7,7 +7,7 @@ var FILE_NUM = 0; // 첨부된 파일 개수
 var FILE_ARRAY = new Array(); // 첨부 파일 저장용 배열
 
 function addFile(obj){
-    let max_file_count = 10; // 첨부팡리 최대 개수
+    let max_file_count = 1; // 첨부팡리 최대 개수
     let attach_file_count =  $('.filebox').length; // 현재 첨부된 파일 개수 / $: jQuery를 사용하여 class 잡음
     let remain_file_count = max_file_count - attach_file_count;
     let current_file_count = obj.files.length; // 현재 첨부된 파일 개수
@@ -49,7 +49,12 @@ function addFile(obj){
 }
 
 function saveFilesToForm(){
-
+    let form = $('form');
+    let form_data = new FormData(form[0]); //
+    for (let i=0; i<FILE_ARRAY.length; i++){
+        form_data.append('file', FILE_ARRAY[i]) // asr_file_views.py에서 'file'이라는 키값으로 접근하려고
+    }
+    return form_data;
 }
 
 // 첨부 파일 검증
@@ -88,4 +93,73 @@ function deleteFile(num){
     FILE_NUM--;
 }
 
+function get_user_id(){
+    // 시간 정보 이용하여 uniqu한 id 생성
+    const date = new Date();
+    const user_id = 
+        // ex. '2026-04-16_163559_1234
+        date.getFullYear()
+        + '-' + date.getMonth()
+        + '-' +  date.getDate()
+        + '_' + date.getHours()
+        + date.getMinutes()
+        + date.getSeconds()
+        + '_' + date.getMilliseconds()
+    return user_id
+}
+
 // 서버 전송 코드
+$(function(){ // document(html)이 준비되었을 때 바로 실행됨 (사용자가 언제 서버 전송하기 버튼을 누를지 모르기 때문에 계속 대기)
+    const result_text_area = $('#result_text_area');
+    result_text_area.attr('hidden', true)
+    // '서버 전송하기' 버튼 클릭되면
+    // user_id = 생성 <- get_user_id()
+    // upload
+    // 만약 업로드 성공하면
+        // ASR 수행 요청 -> process 함수
+    let submit_btn = $('#submit_files');
+    submit_btn.on('click', function(e){
+        // 파일이 첨부되어 있는지 확인 
+        //  서버에서 체크할 수도 있지만 서버는 바쁘니까 유저 컴(js)에서
+        if (FILE_NUM===0){ // === 는 값('0') 뿐만 아니라 type도 일치하는지
+            alert('첨부파일이 없습니다.\n분석할 파일을 추가해 주세요.')
+            return;
+        } 
+        // 파일 첨부 영역 감추기, 업로드 스피터 시작
+        $('#attach_area').attr('hidden', true);
+        $('#p_par_area_process').attr('hidden', false);
+
+        // 파이을 서버로 전송
+        let form_data = saveFilesToForm();
+        let user_id = get_user_id();
+        $.ajax({ // 통신 지원
+            method: 'POST',
+            url: `/asr_file/upload/${user_id}`,
+            data: form_data,
+            dataType: false,// asr_file_views.py의 upload()로 보내는 데이터 형식
+            contentType: 'json', // asr_file_views.py의 upload()로부터 받을 데이터 형식
+            processData: false, // 보내기전에 클라이언트에서 파일을 전처리 못하게
+            cache: false,
+            success: function(result){ //asr_file_views.py의 upload()로부터 reponse가 잘 온 경우. asr_file_views.py의 upload() 반환값을 result가 받음
+                console.log(result['status'])
+                $('#p_par_area_process').attr('hidden', true);
+                $('#result_text_area').attr('hidden', false);
+                process(user_id)
+            },
+            error: function(error){
+                alert('에러가 발생했습니다. 관리자에게 문의해 주세요')
+                console.log(error.status, error.statusText)
+            }
+        });  
+
+    });
+});
+
+function process(user_id){
+    // 서버로 ASR 수행 요청 보냄
+    // 텍스트 데이터가 도착 성공하면
+    // -> html (브라우저)에 시현
+    // 실패하면 -> 에러 발생... 관리자에게 문의해 주세요...
+    console.log(`user_id: ${user_id}`);
+    
+}
