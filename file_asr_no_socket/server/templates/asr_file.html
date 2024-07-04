@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script src="/static/js/attach_file_handler_no_socketio.js"></script>
 
 <div class="row">
     <p class"text-start my-3">
@@ -21,12 +22,12 @@
                 </label>
                 <input class="form-control" 
                     type="file" id="formfile"
-                    onchange="add_file(this);"
+                    onchange="addFile(this);"
                     multiple>
             </div>
             <!-- 첨부된 파일을 화면에 시현 -->
             <div class="mb-3 mx-1 row">
-                <div class="row" id="attached-file-list">
+                <div class="row" id="attached-file-list" hidden>
                     첨부된 파일 목록
                 </div>
                 <div>

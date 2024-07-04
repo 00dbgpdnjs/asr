@@ -2,7 +2,7 @@ from flask import (
     Blueprint, 
     render_template,
 )
-from server.forms import FileUploadForm
+from server.forms import FileUploadForm # 서버 입장에서는 path가 server/ 부터 시작
  
 bp = Blueprint('asr_file', __name__, url_prefix='/asr_file') 
 
