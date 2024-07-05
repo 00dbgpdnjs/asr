@@ -1,5 +1,8 @@
 import config
 from flask import Flask
+from ai_asr.inference import WhisperInference
+
+whisper = WhisperInference()
 
 def create_app() -> Flask:
     '''서비스용 앱 생성'''

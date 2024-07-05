@@ -9,6 +9,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 from config import UPLOAD_FILE_DIR
 from server.forms import FileUploadForm # 서버 입장에서는 path가 server/ 부터 시작
+from server import whisper
  
 bp = Blueprint('asr_file', __name__, url_prefix='/asr_file') 
 
@@ -62,12 +63,16 @@ def process():
                 'status': "fail",
                 'contents': '서버에 처리할 파일이 없습니다.\n다시 시도해 주세요'
             })
-        
     # ASR 인공지능 수행
     result_dic = {}
     result_dic['length'] = len(audio_files)
     for idx, audio in enumerate(audio_files):
-        transcript = 'OpenAI whisper에서 처리한 문자열 겨로가'
+        # transcript = 'OpenAI whisper에서 처리한 문자열 겨로가'
+        target_file = os.path.join(target_dir, audio)
+        transcript = whisper.inference(target_file)
+        transcript = transcript.replace('/', '') 
+        transcript = transcript.replace('. ', '.\n\n') 
+        
         result_dic[f'{idx}'] = transcript
     print(f'result_dic: {result_dic}')
     return jsonify(result_dic)

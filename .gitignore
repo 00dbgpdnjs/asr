@@ -161,6 +161,12 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# whisper_local_live_asr mini-project
 whisper_local_live_asr/model_archive/
+
+# file_asr_no_socket mini-project
 file_asr_no_socket/secret.py
 file_asr_no_socket/server/static/files/
+file_asr_no_socket/ai_asr/models/
+
+gpu_test.py
